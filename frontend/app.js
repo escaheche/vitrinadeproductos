@@ -347,7 +347,7 @@
     detailRequest = new AbortController();
     var controller = detailRequest;
 
-    el.detailId.textContent = "ID " + productId;
+    el.detailId.textContent = "PRODUCTO #" + productId;
     el.detailTitle.textContent = "Cargando…";
     el.detailDescription.textContent = "";
     el.detailList.replaceChildren();
@@ -373,16 +373,20 @@
       })
       .then(function (product) {
         if (controller.signal.aborted) return;
+        var currency = product.currency || "";
+        var price = product.price === null || product.price === undefined ? null : formatPrice(product.price);
+        var original = product.originalPrice === null || product.originalPrice === undefined ? null : formatPrice(product.originalPrice);
+
         el.detailTitle.textContent = product.name || "—";
         el.detailDescription.textContent = product.description || "";
         detailRow("Categoría", product.category);
         detailRow("Formato", product.format);
-        detailRow("Precio publicado", (product.price === null || product.price === undefined ? "—" : formatPrice(product.price) + " " + (product.currency || "")) + (product.priceUnit ? " " + product.priceUnit : ""));
-        detailRow("Precio original", product.originalPrice === null || product.originalPrice === undefined ? "—" : formatPrice(product.originalPrice) + " " + (product.currency || ""));
-        el.detailPrice.textContent = product.price === null || product.price === undefined ? "—" : formatPrice(product.price) + " " + (product.currency || "");
-        el.detailCurrency.textContent = (product.priceUnit || "") + (product.currency ? " / precio en " + product.currency : "");
-        el.detailOriginalPrice.textContent = product.originalPrice === null || product.originalPrice === undefined ? "—" : formatPrice(product.originalPrice) + " " + (product.currency || "");
-        el.detailExtractedAt.textContent = product.extractedAt ? "Extraído: " + product.extractedAt : "";
+        detailRow("Unidad de precio", product.priceUnit);
+        detailRow("Identificador", product.id);
+        el.detailPrice.textContent = price === null ? "—" : price;
+        el.detailCurrency.textContent = currency ? "Moneda: " + currency : "";
+        el.detailOriginalPrice.textContent = original === null ? "—" : original + (currency ? " " + currency : "");
+        el.detailExtractedAt.textContent = product.extractedAt ? "Datos extraídos: " + product.extractedAt : "";
         if (product.imageUrl) {
           el.detailImage.src = product.imageUrl;
           el.detailImage.alt = product.name || "";
