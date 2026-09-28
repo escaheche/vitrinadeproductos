@@ -236,3 +236,13 @@ Verificación local con Uvicorn y verificación con la imagen Docker, el 28 de s
 | `/`, `/index.html`, `/styles.css`, `/app.js` | `200` |
 | `docker build` + `docker run` | Mismos resultados que en local |
 | Frontend (navegador) | Loading, success, empty y error con reintento; búsqueda, filtros, paginación y detalle consultan el backend |
+
+Producción, 28 de septiembre de 2026, en `https://vitrina-mercadona-931735187757.us-central1.run.app`:
+
+| Verificación remota | Resultado |
+|---|---|
+| `/api/health` | `{"status":"ok","products":4032}` |
+| `/api/products?page=1&pageSize=24` | `items=24`, `total=4032`, `totalPages=168` |
+| `/api/products/filters` | 149 categorías y 252 formatos |
+| `/api/products/10043` | `200`, producto completo |
+| `/`, `/index.html`, `/styles.css`, `/app.js` | `200` |

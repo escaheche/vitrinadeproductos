@@ -43,6 +43,7 @@ El frontend no descarga el catálogo completo.
 .
 ├── AGENTS.md
 ├── README.md
+├── .gitattributes
 ├── Dockerfile
 ├── deploy.sh
 ├── docs/
@@ -194,6 +195,41 @@ Ejemplo:
 ```text
 https://vitrina-mercadona-xxxx.a.run.app
 ```
+
+---
+
+## Producción
+
+La aplicación está desplegada en GCP Cloud Run.
+
+URL pública:
+
+```text
+https://vitrina-mercadona-931735187757.us-central1.run.app
+```
+
+Abrir la vitrina:
+
+```text
+https://vitrina-mercadona-931735187757.us-central1.run.app/
+```
+
+Health check en producción:
+
+```bash
+curl https://vitrina-mercadona-931735187757.us-central1.run.app/api/health
+```
+
+Respuesta verificada:
+
+```json
+{
+  "status": "ok",
+  "products": 4032
+}
+```
+
+El mismo servicio sirve el frontend en `/` y la API en `/api`, sin CORS.
 
 ---
 
