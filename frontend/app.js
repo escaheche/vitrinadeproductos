@@ -51,6 +51,16 @@
     return new Intl.NumberFormat("es-ES").format(value);
   }
 
+  function formatMoney(value, currency) {
+    if (value === null || value === undefined || value === "") {
+      return "—";
+    }
+    if (!currency || currency.toUpperCase() === "CLP") {
+      return "$" + formatPrice(value);
+    }
+    return formatPrice(value) + " " + currency;
+  }
+
   function buildQuery() {
     var params = new URLSearchParams();
     if (state.search) params.set("search", state.search);
@@ -374,8 +384,8 @@
       .then(function (product) {
         if (controller.signal.aborted) return;
         var currency = product.currency || "";
-        var price = product.price === null || product.price === undefined ? null : formatPrice(product.price);
-        var original = product.originalPrice === null || product.originalPrice === undefined ? null : formatPrice(product.originalPrice);
+        var price = product.price === null || product.price === undefined ? null : product.price;
+        var original = product.originalPrice === null || product.originalPrice === undefined ? null : product.originalPrice;
 
         el.detailTitle.textContent = product.name || "—";
         el.detailDescription.textContent = product.description || "";
@@ -383,9 +393,9 @@
         detailRow("Formato", product.format);
         detailRow("Unidad de precio", product.priceUnit);
         detailRow("Identificador", product.id);
-        el.detailPrice.textContent = price === null ? "—" : price;
+        el.detailPrice.textContent = formatMoney(price, currency);
         el.detailCurrency.textContent = currency ? "Moneda: " + currency : "";
-        el.detailOriginalPrice.textContent = original === null ? "—" : original + (currency ? " " + currency : "");
+        el.detailOriginalPrice.textContent = formatMoney(original, currency);
         el.detailExtractedAt.textContent = product.extractedAt ? "Datos extraídos: " + product.extractedAt : "";
         if (product.imageUrl) {
           el.detailImage.src = product.imageUrl;
